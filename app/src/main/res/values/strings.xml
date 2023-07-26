@@ -10,7 +10,7 @@
     <string name="frequency_value">%.1f Hz</string>
 
     <string name="button_label_play">Play</string>
+    <string name="button_label_stop">Stop</string>
 
     <string name="frequency_label">Frequency</string>
-
 </resources>
