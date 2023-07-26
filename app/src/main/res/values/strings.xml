@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Wavetable Sythesizer</string>
+    <string name="wavetable">wavetable</string>
+
+    <string name="wavetable_button_sine">Sine</string>
+    <string name="wavetable_button_triangle">Triangle</string>
+    <string name="wavetable_button_square">Square</string>
+    <string name="wavetable_button_saw">Saw</string>
+
+    <string name="frequency_value">%.1f Hz</string>
+
+    <string name="button_label_play">Play</string>
+
+    <string name="frequency_label">Frequency</string>
+
+</resources>
