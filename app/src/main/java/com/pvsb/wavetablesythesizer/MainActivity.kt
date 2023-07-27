@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,8 +44,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pvsb.wavetablesythesizer.ui.theme.WavetableSythesizerTheme
 import com.pvsb.wavetablesythesizer.ui.theme.background
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,13 +58,18 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             WavetableSythesizerTheme(darkTheme = true) {
-                Content()
+
+                val state = viewModel.state.collectAsState()
+
+                Content(state.value)
             }
         }
     }
 
     @Composable
-    private fun Content() {
+    private fun Content(
+        state: MainState = MainState()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -69,7 +81,8 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
             )
             ControlPanels(
-                modifier = Modifier
+                modifier = Modifier,
+                state = state
             )
         }
     }
@@ -118,7 +131,10 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun ControlPanels(modifier: Modifier = Modifier) {
+    private fun ControlPanels(
+        modifier: Modifier = Modifier,
+        state: MainState
+    ) {
         Row(
             modifier = modifier
                 .fillMaxSize(),
@@ -141,7 +157,12 @@ class MainActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                VolumeControl()
+                VolumeControl(volume = state.volume,
+                    volumeRange = state.volumeRange,
+                    onVolumeChanged = {
+                        viewModel.setVolume(it)
+                    }
+                )
             }
         }
     }
@@ -176,14 +197,15 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun VolumeControl(modifier: Modifier = Modifier) {
+    private fun VolumeControl(
+        modifier: Modifier = Modifier,
+        volume: Float,
+        volumeRange: ClosedFloatingPointRange<Float>,
+        onVolumeChanged: (Float) -> Unit
+    ) {
 
         val screenHeight = LocalConfiguration.current.screenHeightDp
         val sliderHeight = screenHeight / 4
-
-        var volume by remember {
-            mutableStateOf(-10f)
-        }
 
         Column(
             modifier = modifier,
@@ -198,12 +220,12 @@ class MainActivity : ComponentActivity() {
 
             Slider(
                 value = volume,
-                onValueChange = { volume = it },
+                onValueChange = onVolumeChanged,
                 modifier = Modifier
                     .height(100.dp)
                     .width(sliderHeight.dp)
                     .rotate(270f),
-                valueRange = -60f..0f
+                valueRange = volumeRange
             )
 
             Icon(
