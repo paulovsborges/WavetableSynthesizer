@@ -23,7 +23,7 @@ class NativeWaveTableSynthesizer : WaveTableSynthesizer, LifecycleEventObserver 
 
     companion object {
         init {
-            System.loadLibrary("wavetablesynthesizer")
+            System.loadLibrary("wavetablesythesizer")
         }
     }
 

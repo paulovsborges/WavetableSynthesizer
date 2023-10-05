@@ -112,3 +112,18 @@ Java_com_pvsb_wavetablesythesizer_wavetableSynthesizer_NativeWaveTableSynthesize
     }
 }
 }
+
+//extern "C"
+//JNIEXPORT jlong JNICALL
+//Java_com_pvsb_wavetablesythesizer_wavetableSynthesizer_NativeWaveTableSynthesizer_create(
+//        JNIEnv *env, jobject thiz) {
+//
+//    auto synthesizer = std::make_unique<wavetablesynthesizer::WaveTableSynthesizer>();
+//
+//    if (not synthesizer) {
+//        LOGD("Failed to create synthesizer");
+//        synthesizer.reset(nullptr);
+//    }
+//
+//    return reinterpret_cast<jlong>(synthesizer.release());
+//}
