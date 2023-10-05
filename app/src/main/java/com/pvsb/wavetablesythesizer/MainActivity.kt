@@ -35,17 +35,23 @@ import androidx.compose.ui.unit.dp
 import com.pvsb.wavetablesythesizer.ui.theme.WavetableSythesizerTheme
 import com.pvsb.wavetablesythesizer.ui.theme.background
 import com.pvsb.wavetablesythesizer.wavetableSynthesizer.LoggingWaveTableSynthesizer
+import com.pvsb.wavetablesythesizer.wavetableSynthesizer.NativeWaveTableSynthesizer
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private val synthesizer: NativeWaveTableSynthesizer by lazy {
+        NativeWaveTableSynthesizer()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.synthesizer = LoggingWaveTableSynthesizer()
+        viewModel.synthesizer = synthesizer
+
+        lifecycle.addObserver(synthesizer)
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
@@ -57,6 +63,11 @@ class MainActivity : ComponentActivity() {
                 Content(state.value)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(synthesizer)
     }
 
     @Composable

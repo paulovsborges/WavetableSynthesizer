@@ -26,14 +26,16 @@ project("wavetablesythesizer")
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
 add_library(${CMAKE_PROJECT_NAME} SHARED
-    # List C/C++ source files with relative paths to this CMakeLists.txt.
-    wavetablesythesizer.cpp)
+        # List C/C++ source files with relative paths to this CMakeLists.txt.
+        wavetablesythesizer.cpp
+        WaveTableSynthesizer.cpp)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
-target_link_libraries(${CMAKE_PROJECT_NAME}
-    # List libraries link to the target library
+target_link_libraries(
+        wavetablesythesizer
+        # List libraries link to the target library
         ${log-lib})
 
 # Searches for a specified prebuilt library and stores the path as a
@@ -50,5 +52,6 @@ find_library( # Sets the name of the path variable.
         log
         )
 
+include_directories(include)
 
 
