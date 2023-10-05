@@ -1,5 +1,6 @@
 package com.pvsb.wavetablesythesizer
 
+import com.pvsb.wavetablesythesizer.wavetableSynthesizer.LoggingWaveTableSynthesizer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

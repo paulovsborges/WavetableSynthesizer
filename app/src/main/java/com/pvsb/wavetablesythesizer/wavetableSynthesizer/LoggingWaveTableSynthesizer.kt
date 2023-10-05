@@ -1,6 +1,8 @@
-package com.pvsb.wavetablesythesizer
+package com.pvsb.wavetablesythesizer.wavetableSynthesizer
 
 import android.util.Log
+import com.pvsb.wavetablesythesizer.WaveTable
+import com.pvsb.wavetablesythesizer.WaveTableSynthesizer
 
 class LoggingWaveTableSynthesizer : WaveTableSynthesizer {
 
