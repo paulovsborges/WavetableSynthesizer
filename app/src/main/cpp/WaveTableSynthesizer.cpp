@@ -27,6 +27,6 @@ namespace wavetablesynthesizer {
     };
 
     void WaveTableSynthesizer::setWaveTable(WaveTable waveTable) {
-        LOGD("setWaveTable() called with argument", static_cast<int>(waveTable));
+        LOGD("setWaveTable() called with %.d argument", static_cast<int>(waveTable));
     };
 }
