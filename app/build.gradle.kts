@@ -23,6 +23,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags += "-std=c++2a"
+                arguments += "-DANDROID_STL=c++_shared"
             }
         }
     }
@@ -45,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        prefab = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -114,6 +116,8 @@ dependencies {
     androidTestImplementation ("androidx.compose.ui:ui-test-junit4")
     debugImplementation ("androidx.compose.ui:ui-tooling")
     debugImplementation ("androidx.compose.ui:ui-test-manifest")
+
+    implementation("com.google.oboe:oboe:1.7.0")
 }
 
 

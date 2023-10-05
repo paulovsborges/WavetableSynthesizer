@@ -28,7 +28,14 @@ project("wavetablesythesizer")
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         wavetablesythesizer.cpp
-        WaveTableSynthesizer.cpp)
+        WaveTableSynthesizer.cpp
+        OboeAudioPlayer.cpp
+        WaveTableOscillator.cpp
+        )
+
+find_package(oboe REQUIRED CONFIG)
+
+
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
@@ -36,7 +43,11 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
 target_link_libraries(
         wavetablesythesizer
         # List libraries link to the target library
-        ${log-lib})
+
+        oboe::oboe
+        ${log-lib}
+
+)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
