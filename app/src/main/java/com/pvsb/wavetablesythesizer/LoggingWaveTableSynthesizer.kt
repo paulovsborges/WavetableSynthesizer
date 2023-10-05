@@ -5,17 +5,19 @@ import android.util.Log
 class LoggingWaveTableSynthesizer : WaveTableSynthesizer {
 
     private companion object {
-        val TAG = this::class.java.simpleName
+        val TAG: String = this::class.java.simpleName
     }
 
     private var isPlaying = false
 
     override suspend fun play() {
         Log.d(TAG, "play")
+        isPlaying = true
     }
 
     override suspend fun stop() {
         Log.d(TAG, "stop: ")
+        isPlaying = false
     }
 
     override suspend fun isPlaying(): Boolean {

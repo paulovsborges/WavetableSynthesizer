@@ -54,6 +54,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.synthesizer = LoggingWaveTableSynthesizer()
+
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
         setContent {
@@ -106,24 +108,15 @@ class MainActivity : ComponentActivity() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                listOf(
+                WaveTable.values().map {
                     SelectionButton(
-                        label = R.string.wavetable_button_sine,
-                        onClick = {}
-                    ),
-                    SelectionButton(
-                        label = R.string.wavetable_button_triangle,
-                        onClick = {}
-                    ),
-                    SelectionButton(
-                        label = R.string.wavetable_button_square,
-                        onClick = {}
-                    ),
-                    SelectionButton(
-                        label = R.string.wavetable_button_saw,
-                        onClick = {}
-                    ),
-                ).forEach { model ->
+                        label = it.resId,
+                        onClick = {
+                            viewModel.setWaveTable(it)
+                        }
+                    )
+
+                }.forEach { model ->
                     SelectionButtons(model = model)
                 }
             }
@@ -149,7 +142,14 @@ class MainActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                PitchControl()
+                PitchControl(
+                    btnLabel = state.playBtnLabel,
+                    sliderPos = state.slidePos,
+                    frequency = state.frequency,
+                    onValueChanged = { pos ->
+                        viewModel.setFrequencySliderPos(pos)
+                    }
+                )
             }
 
             Column(
@@ -157,7 +157,8 @@ class MainActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                VolumeControl(volume = state.volume,
+                VolumeControl(
+                    volume = state.volume,
                     volumeRange = state.volumeRange,
                     onVolumeChanged = {
                         viewModel.setVolume(it)
@@ -168,21 +169,20 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun PitchControl(modifier: Modifier = Modifier) {
-
-        var frequency by remember {
-            mutableStateOf(0f)
-        }
-
+    private fun PitchControl(
+        modifier: Modifier = Modifier,
+        btnLabel: Int,
+        sliderPos: Float,
+        frequency: Float,
+        onValueChanged: (Float) -> Unit
+    ) {
         Text(text = stringResource(id = R.string.frequency_label), color = Color.White)
 
         Slider(
             modifier = modifier.fillMaxWidth(0.8f),
-            value = frequency,
-            onValueChange = {
-                frequency = it
-            },
-            valueRange = 40f..3000f
+            value = sliderPos,
+            onValueChange = onValueChanged,
+            valueRange = 0f..1f
         )
 
         Text(text = stringResource(id = R.string.frequency_value, frequency), color = Color.White)
@@ -190,9 +190,9 @@ class MainActivity : ComponentActivity() {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-
+            viewModel.playClicked()
         }) {
-            Text(text = stringResource(id = R.string.button_label_play))
+            Text(text = stringResource(id = btnLabel))
         }
     }
 

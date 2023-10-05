@@ -11,8 +11,8 @@ import kotlin.math.ln
 
 class MainViewModel : ViewModel() {
 
-    private var synthesizer: WaveTableSynthesizer? = null
-        private set(value) {
+    var synthesizer: WaveTableSynthesizer? = null
+        set(value) {
             field = value
             applyParameters()
         }
@@ -23,6 +23,18 @@ class MainViewModel : ViewModel() {
     fun applyParameters() {
         viewModelScope.launch {
             synthesizer?.setFrequency(_state.value.frequency)
+            synthesizer?.setVolume(_state.value.volume)
+            synthesizer?.setWaveTable(_state.value.waveTable)
+            updateButtonLabel()
+            updateSliderPos()
+        }
+    }
+
+    private fun updateSliderPos() {
+        _state.update {
+            it.copy(
+                slidePos = sliderPositionFromFrequencyInHz(_state.value.frequency)
+            )
         }
     }
 
@@ -38,16 +50,21 @@ class MainViewModel : ViewModel() {
             val frequencyInHz = frequencyInHzFromSliderPos(pos)
 
             synthesizer?.setFrequency(frequencyInHz)
-            _state.update { it.copy(frequency = frequencyInHz) }
+            _state.update {
+                it.copy(
+                    frequency = frequencyInHz
+                )
+            }
+            updateSliderPos()
         }
     }
 
-    fun setVolume(pos: Float) {
+    fun setVolume(volumeInDb: Float) {
         viewModelScope.launch {
-            val frequencyInHz = frequencyInHzFromSliderPos(pos)
+//            val frequencyInHz = frequencyInHzFromSliderPos(pos)
 
-            synthesizer?.setVolume(frequencyInHz)
-            _state.update { it.copy(volume = frequencyInHz) }
+            synthesizer?.setVolume(volumeInDb)
+            _state.update { it.copy(volume = volumeInDb) }
         }
     }
 
@@ -115,7 +132,7 @@ class MainViewModel : ViewModel() {
                 return rangePos
             }
 
-            return (ln(rangePos) - ln(MIN_VALUE) / (-ln(MIN_VALUE)))
+            return (ln(rangePos) - ln(MIN_VALUE)) / (-ln(MIN_VALUE))
         }
     }
 }
