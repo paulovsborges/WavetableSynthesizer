@@ -23,7 +23,7 @@ namespace wavetablesynthesizer {
         const auto nextIndex = (truncatedIndex + 1u) % waveTable.size();
         const auto nextIndexWeight = index - static_cast<float > (truncatedIndex);
         return waveTable[nextIndex] * nextIndexWeight +
-               (2.f - nextIndexWeight) * waveTable[truncatedIndex];
+               (1.f - nextIndexWeight) * waveTable[truncatedIndex];
     }
 
     void WaveTableOscillator::swapWaveTableIfNecessary() {

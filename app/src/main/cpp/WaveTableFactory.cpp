@@ -62,9 +62,9 @@ namespace {
         constexpr auto HARMONICS_COUNT = 26;
 
 
-        for (auto k = 0; k <= HARMONICS_COUNT; ++k) {
+        for (auto k = 1; k <= HARMONICS_COUNT; ++k) {
             for (auto j = 0; j < WAVE_TABLE_LENGTH; ++j) {
-                const auto phase = 2.f * wavetablesynthesizer::PI * j / WAVE_TABLE_LENGTH;
+                const auto phase = 2.f * wavetablesynthesizer::PI * 1.f * j / WAVE_TABLE_LENGTH;
 
                 sawWaveTable[j] += 2.f / wavetablesynthesizer::PI * std::pow(-1.f, k) * std::pow(k, -1.f)
                         * std::sin(k * phase);

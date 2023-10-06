@@ -36,13 +36,19 @@ namespace wavetablesynthesizer {
         std::atomic<bool> waveTableIsBeingSwapped{false};
     };
 
-    class A4Oscillator : public AudioSource {
+    class A4Oscillator : public WaveTableOscillator {
     public:
         explicit A4Oscillator(float sampleRate);
 
         float getSample() override;
 
+        void setFrequency(float frequency) override {};
+
+        void setAmplitude(float newAmplitude) override {};
+
         void onPlaybackStopped() override;
+
+        void setWaveTable(const std::vector<float> &wavetable) override {};
 
     private:
         float _phase{0.f};

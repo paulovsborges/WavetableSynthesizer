@@ -59,7 +59,7 @@ namespace wavetablesynthesizer {
 
         const auto amplitude = dbToAmplitude(volumeInDb);
 
-        _oscillator->setAmplitude(dbToAmplitude(amplitude));
+        _oscillator->setAmplitude(amplitude);
     }
 
     void WaveTableSynthesizer::setWaveTable(WaveTable waveTable) {
