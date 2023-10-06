@@ -1,13 +1,14 @@
 #pragma once
 
 #include <memory>
+#include "WaveTable.h"
+#include <mutex>
+#include "WaveTableFactory.h"
 
 namespace wavetablesynthesizer {
-    enum class WaveTable {
-        SINE, TRIANGLE, SQUARE, SAW
-    };
 
-    class AudioSource;
+
+    class WaveTableOscillator;
 
     class AudioPlayer;
 
@@ -33,8 +34,11 @@ namespace wavetablesynthesizer {
         void setWaveTable(WaveTable waveTable);
 
     private:
-        bool _isPlaying = false;
-        std::shared_ptr<AudioSource> _oscillator;
+        std::atomic<bool> _isPlaying = false;
+        std::mutex _mutex;
+        std::shared_ptr<WaveTableOscillator> _oscillator;
         std::unique_ptr<AudioPlayer> _audioPlayer;
+        WaveTableFactory _waveTableFactory;
+        WaveTable _currentWaveTable{WaveTable::SINE};
     };
 }
